@@ -48,7 +48,7 @@ Home main image
 SUMMARY SECTION
 */
 .summary {
-  margin: 3rem 0 3rem;
+  margin: 5rem 0 3rem;
   font-size: 2rem;
 }
 
@@ -98,4 +98,11 @@ ARTICLES SECTION
   .grid {
     grid-template-columns: 100%;
   }
+}
+
+/* 
+PARAGRAPHS
+*/
+p + p {
+  margin-top: 2rem;
 }
