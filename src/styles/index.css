@@ -19,7 +19,7 @@
 }
 
 .header__title {
-  font-size: 3.2rem;
+  font-size: 3.5rem;
 }
 
 .header__subtitle {
@@ -47,9 +47,18 @@ Home main image
 /* 
 SUMMARY SECTION
 */
+
+.summary-heading {
+  margin-bottom: 2rem;
+  font-size: 3rem;
+}
 .summary {
   margin: 5rem 0 3rem;
   font-size: 2rem;
+}
+
+.summary > p + p {
+  margin-top: 2rem;
 }
 
 /* 
@@ -98,11 +107,4 @@ ARTICLES SECTION
   .grid {
     grid-template-columns: 100%;
   }
-}
-
-/* 
-PARAGRAPHS
-*/
-p + p {
-  margin-top: 2rem;
 }
