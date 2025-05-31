@@ -1,0 +1,16 @@
+{
+  "name": "programming-cookbook",
+  "version": "1.0.0",
+  "main": "build.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "highlight.js": "^11.11.1",
+    "marked": "^15.0.12"
+  }
+}
