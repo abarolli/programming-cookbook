@@ -37,17 +37,34 @@
 }
 
 /* 
+Home main image
+*/
+.home-main-image {
+  width: 100%;
+  border-radius: 30px;
+}
+
+/* 
+SUMMARY SECTION
+*/
+.summary {
+  margin: 3rem 0 3rem;
+  font-size: 2rem;
+}
+
+/* 
 ARTICLES SECTION
 */
 
-.articles-section {
-  display: flex;
-  justify-content: center;
+.main > .main-content {
+  max-width: 1200px;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 3rem;
 }
 
 .articles-container {
   padding: 2rem;
-  max-width: 1200px;
 }
 
 .article-preview {
@@ -60,8 +77,14 @@ ARTICLES SECTION
 .grid {
   display: grid;
   background-color: aliceblue;
-  grid-template-columns: repeat(3, 33%);
-  grid-auto-rows: 10rem;
+}
+
+.articles-container {
+  grid-template-columns: repeat(
+    3,
+    1fr
+  ); /* use fr here instead of % to account for grid gaps */
+  grid-auto-rows: 15rem;
   gap: 10px;
 }
 
