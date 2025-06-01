@@ -5,3 +5,11 @@
 .article-content * {
   margin-bottom: 2rem;
 }
+
+.article-content a {
+  text-decoration: underline;
+}
+
+.article-content a:visited {
+  text-decoration: inherit;
+}
