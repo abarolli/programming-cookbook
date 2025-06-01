@@ -9,7 +9,7 @@ passing around entire entities for performance reasons and it allows more contro
 the controllers consume/provide data to the clients.
 
 Moreover, there may be technical constraints that make it cumbersome/impossible for an entity
-to be parsed to json; for example, [ABetterApproachToManyToMany.md](ABetterApproachToManyToMany.md) describes
+to be parsed to json; for example, [A Better Approach To Many To Many](./A-Better-Approach-To-Many-To-Many.html) describes
 a many-to-many relationship between an Issue and User entity, with an IssueAssignee junction entity between them.
 The Issue entity has a field for IssueAssignees, which also contains a field reference to Issue. Parsing
 this circular relationship to json leads to a stack overflow error due to the maximum recursion depth being reached.
