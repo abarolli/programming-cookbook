@@ -51,7 +51,8 @@ fs.readdirSync(articlesDir).forEach((file) => {
       // </article>
       let htmlName = mdFile.replace(".md", ".html");
 
-      let article = "<article class='grid__item article-preview'>";
+      let article =
+        "<article class='grid__item article-preview wiper--orange'>";
       article += "<a href='./" + htmlName + "'>";
       article +=
         "<h5>" + mdFile.split("-").join(" ").replace(".md", "") + "</h5>";

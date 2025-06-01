@@ -130,3 +130,25 @@ ARTICLES SECTION
     grid-template-columns: 100%;
   }
 }
+
+.wiper--orange {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.wiper--orange::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background-color: orange;
+  transition: width 150ms ease;
+  z-index: -1;
+}
+
+.wiper--orange:hover::before {
+  width: 100%;
+}
