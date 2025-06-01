@@ -1,0 +1,7 @@
+.article-content {
+  font-size: 1.5rem;
+}
+
+.article-content * {
+  margin-bottom: 2rem;
+}
