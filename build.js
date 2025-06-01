@@ -1,14 +1,27 @@
 const fs = require("fs");
 const path = require("path");
-const { marked } = require("marked");
+const { Marked } = require("marked");
+const { markedHighlight } = require("marked-highlight");
 const hljs = require("highlight.js");
 const { log } = require("console");
 
-marked.setOptions({
-  highlight: (code, lang) => {
-    return hljs.highlight(code, { language: lang || "plaintext" }).value;
-  },
-});
+const marked = new Marked(
+  markedHighlight({
+    emptyLangClass: "hljs",
+    langPrefix: "hljs language-",
+    highlight(code, lang, info) {
+      const language = hljs.getLanguage(lang) ? lang : "plaintext";
+      return hljs.highlight(code, { language }).value;
+    },
+  })
+);
+
+const outDir = "./dist";
+if (!fs.existsSync(outDir)) {
+  fs.mkdirSync(outDir);
+  fs.mkdirSync(outDir + "/styles");
+  fs.mkdirSync(outDir + "/images");
+}
 
 const articlesDir = "./src/articles";
 
@@ -36,14 +49,25 @@ fs.readdirSync(articlesDir).forEach((file) => {
       //   <h5>Article name</h5>
       //   <p>A truncated version of the article text...</p>
       // </article>
+      let htmlName = mdFile.replace(".md", ".html");
+
       let article = "<article class='grid__item article-preview'>";
-      article += "<h5>" + mdFile.split("-").join(" ") + "</h5>";
+      article += "<a href='./" + htmlName + "'>";
+      article +=
+        "<h5>" + mdFile.split("-").join(" ").replace(".md", "") + "</h5>";
 
       let markdown = fs.readFileSync(absPath + "/" + mdFile, "utf-8");
+
+      let articleContent = fs
+        .readFileSync("./src/templates/article.html", "utf-8")
+        .replace("<!-- ARICLE CONTENT -->", marked.parse(markdown));
+
+      fs.writeFileSync(outDir + "/" + htmlName, articleContent);
+
       let startIndex = markdown.indexOf("<!-- start -->") + 14;
       let truncatedText =
         markdown.slice(startIndex, startIndex + 100).trim() + "...";
-      article += "<p>" + truncatedText + "</p></article>";
+      article += "<p>" + truncatedText + "</p></a></article>";
       newSection += article;
     });
     newSection += "</div>";
@@ -55,12 +79,6 @@ fs.readdirSync(articlesDir).forEach((file) => {
 let index = fs.readFileSync("./src/index.html", "utf-8");
 index = index.replace("<!-- ARTICLE SECTIONS -->", articleSections);
 
-const outDir = "./dist";
-if (!fs.existsSync(outDir)) {
-  fs.mkdirSync(outDir);
-  fs.mkdirSync(outDir + "/styles");
-  fs.mkdirSync(outDir + "/images");
-}
 fs.writeFileSync(outDir + "/" + "index.html", index);
 
 let stylesDir = "./src/styles";
