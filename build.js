@@ -83,12 +83,15 @@ class ArticlesCollector {
 const articlesDir = "./src/articles";
 const articlesCollector = new ArticlesCollector(articlesDir);
 
-function buildArticleSectionHtmlPreviews() {
+function buildArticleSectionHtmlPreviews(maxPreviews = -1) {
   const articlePreviews = {};
   const articles = articlesCollector.collectArticles();
 
   for (let articleSection in articles) {
-    for (let absPath of articles[articleSection]) {
+    let paths = articles[articleSection];
+    let i = 0;
+    while ((maxPreviews == -1 || i < maxPreviews) && i < paths.length) {
+      let absPath = paths[i];
       let mdFile = path.basename(absPath);
       let htmlName = mdFile.replace(".md", ".html");
 
@@ -110,6 +113,8 @@ function buildArticleSectionHtmlPreviews() {
         articlePreviews[articleSection] = [];
 
       articlePreviews[articleSection].push(article);
+
+      i++;
     }
   }
 
@@ -127,9 +132,9 @@ function writeMdFileToHtml(absPath, marked) {
   fs.writeFileSync(path.join(outDir, htmlName), articleContent);
 }
 
-function buildHtmlArticleSections() {
+function buildHtmlArticleSections(maxPreviews = -1) {
   let articleSections = "";
-  let articlePreviews = buildArticleSectionHtmlPreviews();
+  let articlePreviews = buildArticleSectionHtmlPreviews(maxPreviews);
   for (let articleSection in articlePreviews) {
     let newSection = "<section class='articles-section'>";
     newSection += "<div class='articles-section__heading'>";
@@ -137,12 +142,7 @@ function buildHtmlArticleSections() {
       "<h4 class='articles-section__title'>" + articleSection + "</h4>";
     newSection += "<a href=''>View All</a>";
     newSection += "</div>";
-    newSection += "<div class='grid articles-container'>";
-
-    for (let articlePreview of articlePreviews[articleSection]) {
-      newSection += articlePreview;
-    }
-    newSection += "</div>";
+    newSection += buildHtmlArticlePreviewsGrid(articleSection, articlePreviews);
     newSection += "</section>";
     articleSections += newSection;
   }
@@ -150,8 +150,18 @@ function buildHtmlArticleSections() {
   return articleSections;
 }
 
+function buildHtmlArticlePreviewsGrid(section, articlePreviews) {
+  let links = "<div class='grid articles-container'>";
+  for (let articlePreview of articlePreviews[section]) {
+    links += articlePreview;
+  }
+  links += "</div>";
+  return links;
+}
+
 let index = fs.readFileSync("./src/index.html", "utf-8");
-let articleSections = buildHtmlArticleSections();
+const MAX_PREVIEWS = 6;
+let articleSections = buildHtmlArticleSections(MAX_PREVIEWS);
 index = index.replace("<!-- ARTICLE SECTIONS -->", articleSections);
 
 fs.writeFileSync(path.join(outDir, "index.html"), index);
@@ -164,6 +174,25 @@ for (let articleSection in articles) {
   for (let articleFile of articles[articleSection]) {
     writeMdFileToHtml(articleFile, marked);
   }
+}
+
+const articleLinksPageTemplate = fs.readFileSync(
+  "./src/templates/article-links.html",
+  "utf-8"
+);
+const articlePreviews = buildArticleSectionHtmlPreviews();
+for (let section in articlePreviews) {
+  let grid = buildHtmlArticlePreviewsGrid(section, articlePreviews);
+  let content = articleLinksPageTemplate
+    .replace("<!-- ARTICLE LINKS -->", grid)
+    .replace("<!-- SECTION HEADING -->", section);
+  fs.writeFileSync(
+    path.join(
+      outDir,
+      `${section.replaceAll("/", "_").replaceAll(" ", "-")}.html`
+    ),
+    content
+  );
 }
 
 let stylesDir = "./src/styles";
