@@ -44,40 +44,50 @@ function createOutDir(outDir) {
 const outDir = "./dist";
 createOutDir(outDir);
 
-const articlesDir = "./src/articles";
+class ArticlesCollector {
+  constructor(articlesDir) {
+    this.articlesDir = articlesDir;
+    this.articles = null;
+  }
 
-function collectArticles() {
-  const articles = {};
-  fs.readdirSync(articlesDir).forEach((file) => {
-    let absPath = path.join(articlesDir, file);
-    if (fs.lstatSync(absPath).isDirectory()) {
-      let slashSeparatedTerms = file.split("__");
-      let heading = slashSeparatedTerms
-        .map((value) => {
-          return value
-            .split("-")
-            .map((token) => token[0].toUpperCase() + token.slice(1))
-            .join(" ");
-        })
-        .join("/");
+  collectArticles() {
+    if (this.articles) return this.articles;
 
-      if (!(heading in articles)) articles[heading] = [];
+    this.articles = {};
+    fs.readdirSync(this.articlesDir).forEach((file) => {
+      let absPath = path.join(this.articlesDir, file);
+      if (fs.lstatSync(absPath).isDirectory()) {
+        let slashSeparatedTerms = file.split("__");
+        let heading = slashSeparatedTerms
+          .map((value) => {
+            return value
+              .split("-")
+              .map((token) => token[0].toUpperCase() + token.slice(1))
+              .join(" ");
+          })
+          .join("/");
 
-      fs.readdirSync(absPath).forEach((file) => {
-        let absArticleFIlePath = path.join(absPath, file);
-        articles[heading].push(absArticleFIlePath);
-      });
-    }
-  });
+        if (!(heading in this.articles)) this.articles[heading] = [];
 
-  return articles;
+        fs.readdirSync(absPath).forEach((file) => {
+          let absArticleFIlePath = path.join(absPath, file);
+          this.articles[heading].push(absArticleFIlePath);
+        });
+      }
+    });
+
+    return this.articles;
+  }
 }
+
+const articlesDir = "./src/articles";
+const articlesCollector = new ArticlesCollector(articlesDir);
 
 function buildArticleSectionHtmlPreviews() {
   const articlePreviews = {};
-  const articles = collectArticles();
+  const articles = articlesCollector.collectArticles();
 
-  for (let articleSection in collectArticles()) {
+  for (let articleSection in articles) {
     for (let absPath of articles[articleSection]) {
       let mdFile = path.basename(absPath);
       let htmlName = mdFile.replace(".md", ".html");
@@ -106,8 +116,9 @@ function buildArticleSectionHtmlPreviews() {
   return articlePreviews;
 }
 
-function parseMdArticleToHtml(absPath, marked) {
+function writeMdFileToHtml(absPath, marked) {
   let markdown = fs.readFileSync(absPath, "utf-8");
+  let htmlName = path.basename(absPath).replace(".md", ".html");
 
   let articleContent = fs
     .readFileSync("./src/templates/article.html", "utf-8")
@@ -144,6 +155,16 @@ let articleSections = buildHtmlArticleSections();
 index = index.replace("<!-- ARTICLE SECTIONS -->", articleSections);
 
 fs.writeFileSync(path.join(outDir, "index.html"), index);
+
+// Convert the md article files over to html files.
+const articles = articlesCollector.collectArticles();
+const marked = initMarked();
+
+for (let articleSection in articles) {
+  for (let articleFile of articles[articleSection]) {
+    writeMdFileToHtml(articleFile, marked);
+  }
+}
 
 let stylesDir = "./src/styles";
 fs.readdirSync(stylesDir).forEach((file) =>
