@@ -73,26 +73,12 @@ function collectArticles() {
   return articles;
 }
 
-function buildArticleSectionsHtml() {
-  const marked = initMarked();
+function buildArticleSectionHtmlPreviews() {
+  const articlePreviews = {};
+  const articles = collectArticles();
 
-  let articleSections = "";
-  let articles = collectArticles();
-  for (let articleSection in articles) {
-    let newSection = "<section class='articles-section'>";
-    newSection += "<div class='articles-section__heading'>";
-    newSection +=
-      "<h4 class='articles-section__title'>" + articleSection + "</h4>";
-    newSection += "<a href=''>View All</a>";
-    newSection += "</div>";
-    newSection += "<div class='grid articles-container'>";
-
+  for (let articleSection in collectArticles()) {
     for (let absPath of articles[articleSection]) {
-      // for each article, we'll create the structure below:
-      // <article class="grid__item article-preview">
-      //   <h5>Article name</h5>
-      //   <p>A truncated version of the article text...</p>
-      // </article>
       let mdFile = path.basename(absPath);
       let htmlName = mdFile.replace(".md", ".html");
 
@@ -105,18 +91,45 @@ function buildArticleSectionsHtml() {
         "</h5>";
 
       let markdown = fs.readFileSync(absPath, "utf-8");
-
-      let articleContent = fs
-        .readFileSync("./src/templates/article.html", "utf-8")
-        .replace("<!-- ARICLE CONTENT -->", marked.parse(markdown));
-
-      fs.writeFileSync(path.join(outDir, htmlName), articleContent);
-
       let startIndex = markdown.indexOf("<!-- start -->") + 14;
       let truncatedText =
         markdown.slice(startIndex, startIndex + 100).trim() + "...";
       article += "<p>" + truncatedText + "</p></a></article>";
-      newSection += article;
+
+      if (!(articleSection in articlePreviews))
+        articlePreviews[articleSection] = [];
+
+      articlePreviews[articleSection].push(article);
+    }
+  }
+
+  return articlePreviews;
+}
+
+function parseMdArticleToHtml(absPath, marked) {
+  let markdown = fs.readFileSync(absPath, "utf-8");
+
+  let articleContent = fs
+    .readFileSync("./src/templates/article.html", "utf-8")
+    .replace("<!-- ARICLE CONTENT -->", marked.parse(markdown));
+
+  fs.writeFileSync(path.join(outDir, htmlName), articleContent);
+}
+
+function buildHtmlArticleSections() {
+  let articleSections = "";
+  let articlePreviews = buildArticleSectionHtmlPreviews();
+  for (let articleSection in articlePreviews) {
+    let newSection = "<section class='articles-section'>";
+    newSection += "<div class='articles-section__heading'>";
+    newSection +=
+      "<h4 class='articles-section__title'>" + articleSection + "</h4>";
+    newSection += "<a href=''>View All</a>";
+    newSection += "</div>";
+    newSection += "<div class='grid articles-container'>";
+
+    for (let articlePreview of articlePreviews[articleSection]) {
+      newSection += articlePreview;
     }
     newSection += "</div>";
     newSection += "</section>";
@@ -127,7 +140,7 @@ function buildArticleSectionsHtml() {
 }
 
 let index = fs.readFileSync("./src/index.html", "utf-8");
-let articleSections = buildArticleSectionsHtml();
+let articleSections = buildHtmlArticleSections();
 index = index.replace("<!-- ARTICLE SECTIONS -->", articleSections);
 
 fs.writeFileSync(path.join(outDir, "index.html"), index);
