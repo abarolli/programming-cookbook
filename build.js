@@ -140,7 +140,10 @@ function buildHtmlArticleSections(maxPreviews = -1) {
     newSection += "<div class='articles-section__heading'>";
     newSection +=
       "<h4 class='articles-section__title'>" + articleSection + "</h4>";
-    newSection += "<a href=''>View All</a>";
+    newSection += `<a href='${generateHtmlSlug(
+      "./",
+      articleSection
+    )}'>View All</a>`;
     newSection += "</div>";
     newSection += buildHtmlArticlePreviewsGrid(articleSection, articlePreviews);
     newSection += "</section>";
@@ -148,6 +151,13 @@ function buildHtmlArticleSections(maxPreviews = -1) {
   }
 
   return articleSections;
+}
+
+function generateHtmlSlug(resourcePath, base) {
+  return path.join(
+    resourcePath,
+    `${base.replace("/", "_").replace(" ", "-")}.html`
+  );
 }
 
 function buildHtmlArticlePreviewsGrid(section, articlePreviews) {
@@ -186,13 +196,7 @@ for (let section in articlePreviews) {
   let content = articleLinksPageTemplate
     .replace("<!-- ARTICLE LINKS -->", grid)
     .replace("<!-- SECTION HEADING -->", section);
-  fs.writeFileSync(
-    path.join(
-      outDir,
-      `${section.replaceAll("/", "_").replaceAll(" ", "-")}.html`
-    ),
-    content
-  );
+  fs.writeFileSync(generateHtmlSlug(outDir, section), content);
 }
 
 let stylesDir = "./src/styles";
