@@ -100,7 +100,9 @@ function buildArticleSectionsHtml() {
         "<article class='grid__item article-preview wiper--orange'>";
       article += "<a class='article-preview-link' href='./" + htmlName + "'>";
       article +=
-        "<h5>" + mdFile.split("-").join(" ").replace(".md", "") + "</h5>";
+        "<h5 class='article-preview__title'>" +
+        mdFile.split("-").join(" ").replace(".md", "") +
+        "</h5>";
 
       let markdown = fs.readFileSync(absPath, "utf-8");
 

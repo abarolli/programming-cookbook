@@ -116,9 +116,9 @@ ARTICLES SECTION
   padding: 1rem;
 }
 
-.article-preview > h5 {
+.article-preview__title {
   font-size: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .grid {
@@ -162,6 +162,10 @@ ARTICLES SECTION
   background-color: orange;
   transition: width 150ms ease;
   z-index: -1;
+}
+
+.wiper--orange:hover {
+  color: white;
 }
 
 .wiper--orange:hover::before {
