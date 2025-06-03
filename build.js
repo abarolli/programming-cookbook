@@ -16,6 +16,20 @@ const marked = new Marked(
   })
 );
 
+const renderer = new marked.Renderer();
+renderer.heading = function ({ tokens, depth }) {
+  const text = this.parser.parseInline(tokens);
+  const id = text.toLowerCase().replace(/[^\w]+/g, "-");
+
+  return `
+            <h${depth} id=${id}>
+              
+              ${text}
+            </h${depth}>`;
+};
+
+marked.use({ renderer });
+
 const outDir = "./dist";
 if (!fs.existsSync(outDir)) {
   fs.mkdirSync(outDir);
