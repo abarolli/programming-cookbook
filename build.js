@@ -80,8 +80,11 @@ function buildArticleSectionsHtml() {
   let articles = collectArticles();
   for (let articleSection in articles) {
     let newSection = "<section class='articles-section'>";
+    newSection += "<div class='articles-section__heading'>";
     newSection +=
-      "<h4 class='articles-section__heading'>" + articleSection + "</h4>";
+      "<h4 class='articles-section__title'>" + articleSection + "</h4>";
+    newSection += "<a href=''>View All</a>";
+    newSection += "</div>";
     newSection += "<div class='grid articles-container'>";
 
     for (let absPath of articles[articleSection]) {
