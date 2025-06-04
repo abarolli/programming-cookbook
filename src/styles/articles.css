@@ -2,6 +2,10 @@
   font-size: 1.5rem;
 }
 
+.article-content p {
+  font-size: 1.8rem;
+}
+
 .article-content * {
   margin-bottom: 2rem;
 }

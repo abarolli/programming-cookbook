@@ -55,6 +55,26 @@ a.article-preview-link {
 }
 
 /* 
+PARAGRAPHS
+*/
+p {
+  line-height: 150%;
+}
+
+/* 
+HEADINGS
+*/
+
+* + h1,
+* + h2 {
+  margin-top: 5rem;
+}
+
+* + h3 {
+  margin-top: 3rem;
+}
+
+/* 
 Home main image
 */
 .home-main-image {
@@ -75,7 +95,7 @@ SUMMARY SECTION
   font-size: 2rem;
 }
 
-.summary > p + p {
+p + p {
   margin-top: 2rem;
 }
 
@@ -109,7 +129,7 @@ ARTICLES SECTION
 }
 
 .main > .main-content {
-  max-width: 1200px;
+  max-width: 800px;
   margin-right: auto;
   margin-left: auto;
   padding: 3rem;
@@ -133,18 +153,18 @@ ARTICLES SECTION
 
 .articles-container {
   grid-template-columns: repeat(
-    3,
+    2,
     1fr
   ); /* use fr here instead of % to account for grid gaps */
-  grid-auto-rows: 15rem;
+  grid-auto-rows: 20rem;
   gap: 10px;
 }
 
-@media screen and (max-width: 1200px) {
+/* @media screen and (max-width: 1200px) {
   .grid {
-    grid-template-columns: repeat(2, 50%);
+    grid-template-columns: repeat(2, 1fr);
   }
-}
+} */
 
 @media screen and (max-width: 900px) {
   .grid {
