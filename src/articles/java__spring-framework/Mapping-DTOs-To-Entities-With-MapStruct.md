@@ -1,4 +1,6 @@
-# Problem
+# Mapping DTOs to Entities with MapStruct
+
+## Problem
 
 <!-- start -->
 

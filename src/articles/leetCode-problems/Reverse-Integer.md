@@ -50,7 +50,7 @@ Note that `-54 % 10` resulted in -4 being returned... in languages like Java and
 
 ### Pop by dividing by 10
 
-We can get every number, up to but not including the last digit by performing integer division with respect to 10.
+We can get every number, up to but not including the last digit, by performing integer division with respect to 10.
 
 ```java
 // 123 / 10 == 12
@@ -60,7 +60,7 @@ We can get every number, up to but not including the last digit by performing in
 
 Note again that -54 / 10 returned a -5... this is only the case in languages like C or Java where the fractional part is effectively lopped off and the value is truncated towards 0, regardless of whether it is positive or negative.
 The behavior is different in languages like Python where something like `-54 // 10 == -6` because python does floor division... the number is rounded down towards negative infinity, regardless of the sign.
-So in the case of `-54 // 10`, `54 / 10` is equal to `-5.4` and that gets rounded down to the nearest whole
+So in the case of `-54 // 10`, `-54 / 10` is equal to `-5.4` and that gets rounded down to the nearest whole
 number towards negative infinity, resulting in `-6`. Again, see the [Python Section](#python-section) for more info.
 
 With the above knowledge, you can do something like this to effectively emmulate a "pop" operation on an integer:

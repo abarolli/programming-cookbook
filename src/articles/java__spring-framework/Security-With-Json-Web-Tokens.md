@@ -206,7 +206,7 @@ public class JwtService {
 }
 ```
 
-Note, the SECRET_KEY is injected from the application properties file. Please see [GeneratingARandomSecureKeyForTokenGeneration.md](../java/GeneratingARandomSecureKeyForTokenGeneration.md)
+Note, the SECRET_KEY is injected from the application properties file. Please see [Generating A Random Secure Key For Token Generation](./Generating-A-Random-Secure-Key-For-Web-Token-Generation.html)
 for info on how to generate such a key for JWT creation.
 
 Next is implementing the authentication filter.
