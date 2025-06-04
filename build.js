@@ -170,7 +170,7 @@ function buildHtmlArticlePreviewsGrid(section, articlePreviews) {
 }
 
 let index = fs.readFileSync("./src/index.html", "utf-8");
-const MAX_PREVIEWS = 6;
+const MAX_PREVIEWS = 4;
 let articleSections = buildHtmlArticleSections(MAX_PREVIEWS);
 index = index.replace("<!-- ARTICLE SECTIONS -->", articleSections);
 
