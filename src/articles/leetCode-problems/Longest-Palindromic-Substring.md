@@ -46,7 +46,7 @@ Two pointers, _first_ and _second_ will start at the same position and will move
 forward _sequentially_, not _simultaneously_. These two pointers will always represent the "center" of our palindrome; when
 trying to find an odd-length palindrome, the pointers will be directly on top of each other, when trying to find an even-length
 palindrome, the pointers will be one off from each other (the _first_ pointer will be one ahead of _second_). At each iteration,
-two more pointers will be spawned, a _left_ pointer starting at _second_ and a _right_ pointer starting at _first_. As long as,
+two more pointers will be spawned, a _left_ pointer starting at _second_ and a _right_ pointer starting at _first_. As long as
 the characters at the two pointers are equal, we have a valid palindrome and the left pointer moves left one and right pointer
 moves right one. The moment the characters at the left and right pointers are not equal, we no longer have a palindrome and should
 break out of the inner loop. Each time we break out of the inner loop, we calculate the substring at that point and if it's longer

@@ -127,6 +127,10 @@ function writeMdFileToHtml(absPath, marked) {
 
   let articleContent = fs
     .readFileSync("./src/templates/article.html", "utf-8")
+    .replace(
+      "<!-- ARTICLE TITLE -->",
+      htmlName.replaceAll("-", " ").replace(".html", "")
+    )
     .replace("<!-- ARICLE CONTENT -->", marked.parse(markdown));
 
   fs.writeFileSync(path.join(outDir, htmlName), articleContent);

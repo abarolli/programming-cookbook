@@ -72,6 +72,7 @@ public class Issue {
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class IssueCreateRequestDTO {
     private String title;
     private String description;
@@ -79,15 +80,19 @@ public class IssueCreateRequestDTO {
     private String priority;
     private List<UserDTO> assignees;
 
-    public IssueCreateRequestDTO(Issue issue) {
-        this.title = issue.getTitle();
-        this.description = issue.getDescription();
-        this.status = issue.getStatus().name(); // manually converting from enum to string
-        this.priority = issue.getPriority().name(); // manually converting from enum to string
-        this.assignees = issue.getAssignees()
-                                    .stream()
-                                    .map(assignee -> new UserDTO(assignee.getUser()))
-                                    .collect(Collectors.toList());
+    public Issue toIssue() {
+        Issue issue = new Issue();
+        issue.setTitle(title);
+        issue.setDescription(description);
+        issue.setStatus(status);
+        issue.setPriority(priority);
+        issue.setAssignees(
+            assignees
+                .stream()
+                .map(userDto -> userDto.toUser())
+                .collect(Collectors.toSet()));
+
+        return issue;
     }
 }
 ```
