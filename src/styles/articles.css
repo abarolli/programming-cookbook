@@ -17,3 +17,7 @@
 .article-content a:visited {
   text-decoration: inherit;
 }
+
+img {
+  width: 100%;
+}

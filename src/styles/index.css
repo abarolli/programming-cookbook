@@ -153,8 +153,8 @@ ARTICLES SECTION
 
 .articles-container {
   grid-template-columns: repeat(
-    2,
-    1fr
+    auto-fill,
+    minmax(300px, 1fr)
   ); /* use fr here instead of % to account for grid gaps */
   grid-auto-rows: 20rem;
   gap: 10px;
